@@ -138,6 +138,12 @@ def main():
     for dat_path in in_dir.glob("*.dat"):
         try:
             colors, w, h = load_map_dat(dat_path)
+
+            # skip completely blank/black maps
+            if all(c == 0 for c in colors):
+                print(f"Skipping {dat_path.name}: blank/black map")
+                continue
+
             img = colors_to_image(colors, w, h, palette)
             png_path = out_dir / (dat_path.stem + ".png")
             img.save(png_path)
